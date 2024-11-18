@@ -1,4 +1,4 @@
-# Godot Multiplayer Template
+# Godot 3D Multiplayer Template
 
 This is a template for a 3D multiplayer game developed in Godot Engine 4.3. It provides a basic structure for a multiplayer setup, where each player has a nickname displayed above their character and the option to choose from four different skins: red, green, blue, or yellow.
 <br>
@@ -21,6 +21,11 @@ Go to `Debug` > `Customize Run Instances`, then enable `Enable Multiple Instance
 * <kbd>Shift</kbd> to run.
 * <kbd>Space</kbd> to jump.
 * <kbd>Esc</kbd> to quit.
+
+## Screenshots
+
+<img src="./.github/screenshot1.PNG" alt="Image Example" width="700px">
+<img src="./.github/screenshot3.PNG" alt="Image Example" width="700px">
 
 ## Credits
 
