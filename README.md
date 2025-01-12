@@ -38,6 +38,10 @@ Go to `Debug` > `Customize Run Instances`, then enable `Enable Multiple Instance
 <img src="./.github/screenshot3.PNG" alt="Image Example" width="700px">
 <img src="./.github/screenshot4.PNG" alt="Image Example" width="700px">
 
+## Contributing
+
+If you want to contribute to this project, please refer to our [Contributing Guidelines](CONTRIBUTING.md).
+
 ## Credits
 
 * 3D-Godot-Robot-Platformer-Character - https://github.com/AGChow/3D-Godot-Robot-Platformer-Character (CC0)
