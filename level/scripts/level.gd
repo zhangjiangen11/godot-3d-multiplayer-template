@@ -110,7 +110,9 @@ func _on_send_pressed() -> void:
 	if trimmed_message == "":
 		return # do not send empty messages
 
-	rpc("msg_rpc", nick_input.text.strip_edges(), trimmed_message)
+	var nick = Network.players[multiplayer.get_unique_id()]["nick"]
+	
+	rpc("msg_rpc", nick, trimmed_message)
 	message.text = ""
 	message.grab_focus()
 

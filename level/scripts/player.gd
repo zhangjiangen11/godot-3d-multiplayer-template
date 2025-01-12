@@ -33,7 +33,7 @@ func _physics_process(delta):
 	if not is_multiplayer_authority(): return
 	
 	var current_scene = get_tree().get_current_scene()
-	if current_scene and current_scene.has_method("is_chat_visible") and current_scene.is_chat_visible():
+	if current_scene and current_scene.has_method("is_chat_visible") and current_scene.is_chat_visible() and is_on_floor():
 		freeze()
 		return
 	
