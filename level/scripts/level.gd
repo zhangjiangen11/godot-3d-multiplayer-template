@@ -7,7 +7,17 @@ extends Node3D
 @onready var menu: Control = $Menu
 @export var player_scene: PackedScene
 
+# multiplayer chat
+@onready var message: LineEdit = $MultiplayerChat/Message
+@onready var send: Button = $MultiplayerChat/Send
+@onready var chat: TextEdit = $MultiplayerChat/Chat
+@onready var multiplayer_chat: Control = $MultiplayerChat
+var chat_visible = false
+
 func _ready():
+	multiplayer_chat.hide()
+	menu.show()
+	multiplayer_chat.set_process_input(true)
 	if not multiplayer.is_server():
 		return
 		
@@ -73,3 +83,37 @@ func sync_player_skin(id: int, skin_name: String):
 func _on_quit_pressed() -> void:
 	get_tree().quit()
 	
+# ---------- MULTIPLAYER CHAT ----------
+func toggle_chat():
+	if menu.visible:
+		return
+
+	chat_visible = !chat_visible
+	if chat_visible:
+		multiplayer_chat.show()
+		message.grab_focus()
+	else:
+		multiplayer_chat.hide()
+		get_viewport().set_input_as_handled()
+
+func is_chat_visible() -> bool:
+	return chat_visible
+
+func _input(event):
+	if event.is_action_pressed("toggle_chat"):
+		toggle_chat()
+	elif event is InputEventKey and event.keycode == KEY_ENTER:
+		_on_send_pressed()
+
+func _on_send_pressed() -> void:
+	var trimmed_message = message.text.strip_edges()
+	if trimmed_message == "":
+		return # do not send empty messages
+
+	rpc("msg_rpc", nick_input.text.strip_edges(), trimmed_message)
+	message.text = ""
+	message.grab_focus()
+
+@rpc("any_peer", "call_local")
+func msg_rpc(nick, msg):
+	chat.text += str(nick, " : ", msg, "\n")
