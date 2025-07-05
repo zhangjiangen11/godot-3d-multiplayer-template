@@ -1,6 +1,6 @@
 [gd_scene load_steps=17 format=3 uid="uid://dugaivbj1o66n"]
 
-[ext_resource type="Script" path="res://level/scripts/level.gd" id="1_e1sh7"]
+[ext_resource type="Script" uid="uid://d0dgljwwl463n" path="res://level/scripts/level.gd" id="1_e1sh7"]
 [ext_resource type="PackedScene" uid="uid://cffjduipbb3s5" path="res://level/scenes/player.tscn" id="1_uvcbi"]
 [ext_resource type="FontFile" uid="uid://diapabmalpcrj" path="res://assets/fonts/Kurland.ttf" id="3_icc4p"]
 
@@ -274,79 +274,68 @@ flat = true
 
 [node name="MultiplayerChat" type="Control" parent="."]
 visible = false
+top_level = true
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -638.0
-offset_bottom = -224.0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = -764.0
+offset_bottom = -254.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="ChatTitle" type="Label" parent="MultiplayerChat"]
-top_level = true
-layout_mode = 2
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -561.0
-offset_top = -296.0
-offset_right = -77.0
-offset_bottom = -278.0
+[node name="VBoxContainer" type="VBoxContainer" parent="MultiplayerChat"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_horizontal = 8
-theme_override_fonts/font = ExtResource("3_icc4p")
-text = "Welcome to Global Chat!"
-horizontal_alignment = 1
-vertical_alignment = 1
+alignment = 1
 
-[node name="Chat" type="TextEdit" parent="MultiplayerChat"]
-layout_mode = 0
-offset_left = 15.0
-offset_top = 22.0
-offset_right = 499.0
-offset_bottom = 327.0
+[node name="Chat" type="TextEdit" parent="MultiplayerChat/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
 theme_override_fonts/font = ExtResource("3_icc4p")
 text = "
 "
 
-[node name="Message" type="LineEdit" parent="MultiplayerChat"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.038
-anchor_top = 0.214
-anchor_right = 0.038
-anchor_bottom = 0.214
-offset_left = -4.776
-offset_top = 243.328
-offset_right = 479.224
-offset_bottom = 274.328
-grow_horizontal = 2
-grow_vertical = 2
+[node name="HBoxContainer" type="HBoxContainer" parent="MultiplayerChat/VBoxContainer"]
+layout_mode = 2
+
+[node name="Message" type="LineEdit" parent="MultiplayerChat/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
 theme_override_fonts/font = ExtResource("3_icc4p")
 
-[node name="Send" type="Button" parent="MultiplayerChat"]
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -499.0
-offset_top = 161.0
-offset_right = -452.0
-offset_bottom = 192.0
-grow_horizontal = 0
-grow_vertical = 2
+[node name="Send" type="Button" parent="MultiplayerChat/VBoxContainer/HBoxContainer"]
+layout_mode = 2
 theme_override_fonts/font = ExtResource("3_icc4p")
 text = "Send"
 
+[node name="ChatTitle" type="Label" parent="MultiplayerChat"]
+top_level = true
+layout_mode = 2
+anchor_right = 1.0
+offset_top = 16.0
+offset_right = -764.0
+offset_bottom = 34.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+theme_override_fonts/font = ExtResource("3_icc4p")
+text = "Welcome to Global Chat!"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://level/scenes/player.tscn")
+_spawnable_scenes = PackedStringArray("uid://cffjduipbb3s5")
 spawn_path = NodePath("../PlayersContainer")
 
 [node name="PlayersContainer" type="Node3D" parent="."]
@@ -360,4 +349,4 @@ offset_bottom = 40.0
 [connection signal="pressed" from="Menu/MainContainer/MainMenu/Buttons/Host" to="." method="_on_host_pressed"]
 [connection signal="pressed" from="Menu/MainContainer/MainMenu/Buttons/Join" to="." method="_on_join_pressed"]
 [connection signal="pressed" from="Menu/MainContainer/MainMenu/Option4/Quit" to="." method="_on_quit_pressed"]
-[connection signal="pressed" from="MultiplayerChat/Send" to="." method="_on_send_pressed"]
+[connection signal="pressed" from="MultiplayerChat/VBoxContainer/HBoxContainer/Send" to="." method="_on_send_pressed"]

@@ -8,10 +8,11 @@ extends Node3D
 @export var player_scene: PackedScene
 
 # multiplayer chat
-@onready var message: LineEdit = $MultiplayerChat/Message
-@onready var send: Button = $MultiplayerChat/Send
-@onready var chat: TextEdit = $MultiplayerChat/Chat
+@onready var message: LineEdit = $MultiplayerChat/VBoxContainer/HBoxContainer/Message
+@onready var send: Button = $MultiplayerChat/VBoxContainer/HBoxContainer/Send
+@onready var chat: TextEdit = $MultiplayerChat/VBoxContainer/Chat
 @onready var multiplayer_chat: Control = $MultiplayerChat
+
 var chat_visible = false
 
 func _ready():
@@ -51,8 +52,8 @@ func _add_player(id: int, player_info : Dictionary):
 	var nick = Network.players[id]["nick"]
 	player.rpc("change_nick", nick)
 	
-	var skin_name = player_info["skin"]
-	rpc("sync_player_skin", id, skin_name)
+	var skin_enum = player_info["skin"]
+	rpc("sync_player_skin", id, skin_enum)
 	
 	rpc("sync_player_position", id, player.position)
 	
@@ -74,11 +75,11 @@ func sync_player_position(id: int, new_position: Vector3):
 		player.position = new_position
 		
 @rpc("any_peer", "call_local")
-func sync_player_skin(id: int, skin_name: String):
+func sync_player_skin(id: int, skin_color: Character.SkinColor):
 	if id == 1: return # ignore host
 	var player = players_container.get_node(str(id))
 	if player:
-		player.set_player_skin(skin_name)
+		player.set_player_skin(skin_color)
 		
 func _on_quit_pressed() -> void:
 	get_tree().quit()

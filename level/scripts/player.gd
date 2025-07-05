@@ -5,6 +5,8 @@ const NORMAL_SPEED = 6.0
 const SPRINT_SPEED = 10.0
 const JUMP_VELOCITY = 10
 
+enum SkinColor { BLUE, YELLOW, GREEN, RED }
+
 @onready var nickname: Label3D = $PlayerNick/Nickname
 
 @export_category("Objects")
@@ -16,6 +18,11 @@ const JUMP_VELOCITY = 10
 @export var yellow_texture : CompressedTexture2D
 @export var green_texture : CompressedTexture2D
 @export var red_texture : CompressedTexture2D
+
+@onready var _bottom_mesh: MeshInstance3D = get_node("3DGodotRobot/RobotArmature/Skeleton3D/Bottom")
+@onready var _chest_mesh: MeshInstance3D = get_node("3DGodotRobot/RobotArmature/Skeleton3D/Chest")
+@onready var _face_mesh: MeshInstance3D = get_node("3DGodotRobot/RobotArmature/Skeleton3D/Face")
+@onready var _limbs_head_mesh: MeshInstance3D = get_node("3DGodotRobot/RobotArmature/Skeleton3D/Llimbs and head")
 
 var _current_speed: float
 var _respawn_point = Vector3(0, 5, 0)
@@ -50,6 +57,9 @@ func _physics_process(delta):
 	_move()
 	move_and_slide()
 	_body.animate(velocity)
+	
+func _process(_delta):
+	if not is_multiplayer_authority(): return
 	_check_fall_and_respawn()
 	
 func freeze():
@@ -101,26 +111,22 @@ func change_nick(new_nick: String):
 	if nickname:
 		nickname.text = new_nick
 		
-func get_texture_from_name(skin_name: String) -> CompressedTexture2D:
-	match skin_name:
-		"blue": return blue_texture
-		"green": return green_texture
-		"red": return red_texture
-		"yellow": return yellow_texture
+func get_texture_from_name(skin_color: SkinColor) -> CompressedTexture2D:
+	match skin_color:
+		SkinColor.BLUE: return blue_texture
+		SkinColor.GREEN: return green_texture
+		SkinColor.RED: return red_texture
+		SkinColor.YELLOW: return yellow_texture
 		_: return blue_texture
 		
 @rpc("any_peer", "reliable")
-func set_player_skin(skin_name: String) -> void:
+func set_player_skin(skin_name: SkinColor) -> void:
 	var texture = get_texture_from_name(skin_name)
-	var bottom: MeshInstance3D = get_node("3DGodotRobot/RobotArmature/Skeleton3D/Bottom")
-	var chest: MeshInstance3D = get_node("3DGodotRobot/RobotArmature/Skeleton3D/Chest")
-	var face: MeshInstance3D = get_node("3DGodotRobot/RobotArmature/Skeleton3D/Face")
-	var limbs_head: MeshInstance3D = get_node("3DGodotRobot/RobotArmature/Skeleton3D/Llimbs and head")
 	
-	set_mesh_texture(bottom, texture)
-	set_mesh_texture(chest, texture)
-	set_mesh_texture(face, texture)
-	set_mesh_texture(limbs_head, texture)
+	set_mesh_texture(_bottom_mesh, texture)
+	set_mesh_texture(_chest_mesh, texture)
+	set_mesh_texture(_face_mesh, texture)
+	set_mesh_texture(_limbs_head_mesh, texture)
 	
 func set_mesh_texture(mesh_instance: MeshInstance3D, texture: CompressedTexture2D) -> void:
 	if mesh_instance:

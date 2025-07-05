@@ -7,7 +7,7 @@ const MAX_PLAYERS : int = 10
 var players = {}
 var player_info = {
 	"nick" : "host",
-	"skin" : "blue"
+	"skin" : Character.SkinColor.BLUE
 }
 
 signal player_connected(peer_id, player_info)
@@ -34,19 +34,26 @@ func start_host():
 	players[1] = player_info
 	player_connected.emit(1, player_info)
 	
-func join_game(nickname: String, skin_color: String, address: String = SERVER_ADDRESS):
+func join_game(nickname: String, skin_color_str: String, address: String = SERVER_ADDRESS):
 	var peer = ENetMultiplayerPeer.new()
 	var error = peer.create_client(address, SERVER_PORT)
 	if error:
 		return error
-
+	
 	multiplayer.multiplayer_peer = peer
+	
 	if !nickname:
 		nickname = "Player_" + str(multiplayer.get_unique_id())
-	if !skin_color or (skin_color != "red" and skin_color != "blue" and skin_color != "green" and skin_color != "yellow"):
-		skin_color = "blue"
+		
+	var skin_enum: Character.SkinColor = Character.SkinColor.BLUE # default
+	match skin_color_str.to_lower():
+		"blue": skin_enum = Character.SkinColor.BLUE
+		"yellow": skin_enum = Character.SkinColor.YELLOW
+		"green": skin_enum = Character.SkinColor.GREEN
+		"red": skin_enum = Character.SkinColor.RED
+		
 	player_info["nick"] = nickname
-	player_info["skin"] = skin_color
+	player_info["skin"] = skin_enum 
 	
 func _on_connected_ok():
 	var peer_id = multiplayer.get_unique_id()
