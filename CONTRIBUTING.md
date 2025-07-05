@@ -18,6 +18,6 @@ If you wish to contribute to the project, please follow the steps below to ensur
 
 ## Reporting Issues
 
-If you encounter bugs or have suggestions, please feel free to open an issue on GitHub. When reporting an issue, provide as much information as possible.
+If you encounter bugs or have suggestions, please feel free to open an issue on GitHub.
 
 Thank you for contributing!

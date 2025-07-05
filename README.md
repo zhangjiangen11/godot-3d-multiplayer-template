@@ -1,28 +1,33 @@
 # Godot 3D Multiplayer Template
 
-This is a template for a 3D multiplayer game developed in Godot Engine 4.3. It provides a basic structure for a multiplayer setup, where each player has a nickname displayed above their character and the option to choose from four different skins: red, green, blue, or yellow. Additionally, the template includes a global multiplayer chat system for player communication.
+This is a foundational template for a 3D multiplayer game, developed in Godot Engine 4.4. It offers a starting structure for your next multiplayer project, including essential functionalities for players to interact and communicate in real-time.
+
+
+> This template is also available on the [Godot Asset Library](https://godotengine.org/asset-library/asset/3377).
+
+## Key Features
+
+This template provides everything you need to kickstart your multiplayer game development:
+
+* **Network System:** A base for managing client-server connections, allowing multiple players to connect and interact within the same environment.
+* **Player Management:** Easily add multiple players to the game, controlling their interactions and movement in a 3D space.
+* **Real-Time Synchronization:** Player movements and animations are smoothly synchronized, ensuring a consistent experience for everyone.
+* **Player Name Displayed:** Each player's nickname is shown above their character for easy identification.
+* **Player Skin Selection:** Players can choose from four skin options (red, green, blue, or yellow) to personalize their avatars.
+* **Global Multiplayer Chat:** An integrated chat system allows players to communicate in real-time with everyone in the game.
+
+## How to Run the Project
+
+Follow these simple steps to get the template up and running:
+
+1. **Clone or Download:** Obtain the repository by cloning it via Git or downloading the ZIP file.
+2. **Open in Godot Engine:** Load the project in your [Godot Engine](https://godotengine.org) installation.
+3. **Execute:** Press <kbd>F5</kbd> or click `Run Project` in the Godot editor.
+
 <br>
-This template is also available in the [Godot Asset Library](https://godotengine.org/asset-library/asset/3377).
 
-## How to run the project
-
-1. Download or clone this GitHub repository.
-2. Open the project in [Godot Engine](https://godotengine.org).
-3. Press <kbd>F5</kbd> or `Run Project`.
-
-<br>
-
-Note: To test multiplayer locally, follow these steps:
-Go to `Debug` > `Customize Run Instances`, then enable `Enable Multiple Instances` and set the number of instances to run simultaneously. In this template, the host is not treated as a player.
-
-## What Does This Template Offer?
-
-* **Network System:** Includes a basic system for managing client-server connections.
-* **Player Setup:** The template allows for adding multiple players to the game, managing their interactions and movement within the 3D environment.
-* **Real-Time Synchronization:** Player movements and animations are synchronized in real-time.
-* **Player Names Displayed:** Player names are shown above their heads.
-* **Player Skin Selection:** Players can now choose from four skins: red, green, blue, or yellow.
-* **Global Multiplayer Chat:** A global chat system that allows players to send messages to everyone in the game.
+To test the multiplayer functionality locally:
+Go to `Debug` > `Customize Run Instances`, then enable `Enable Multiple Instances` and set the number of instances you want to run simultaneously. In our template, the host is not treated as an additional player.
 
 ## Controls
 
@@ -34,9 +39,9 @@ Go to `Debug` > `Customize Run Instances`, then enable `Enable Multiple Instance
 
 ## Screenshots
 
-<img src="./.github/screenshot1.PNG" alt="Image Example" width="700px">
-<img src="./.github/screenshot3.PNG" alt="Image Example" width="700px">
-<img src="./.github/screenshot4.PNG" alt="Image Example" width="700px">
+<img src="./.github/img1.png" alt="Image Example" width="700px">
+<img src="./.github/img4.PNG" alt="Image Example" width="700px">
+<img src="./.github/img3.png" alt="Image Example" width="700px">
 
 ## Contributing
 
@@ -44,4 +49,4 @@ If you want to contribute to this project, please refer to our [Contributing Gui
 
 ## Credits
 
-* 3D-Godot-Robot-Platformer-Character - https://github.com/AGChow/3D-Godot-Robot-Platformer-Character (CC0)
+* 3D-Godot-Robot-Platformer-Character: https://github.com/AGChow/3D-Godot-Robot-Platformer-Character (CC0)
