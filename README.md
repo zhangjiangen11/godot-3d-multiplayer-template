@@ -3,7 +3,7 @@
 This is a foundational template for a 3D multiplayer game, developed in Godot Engine 4.4. It offers a starting structure for your next multiplayer project, including essential functionalities for players to interact and communicate in real-time.
 
 
-> This template is also available on the [Godot Asset Library](https://godotengine.org/asset-library/asset/3377).
+> This template is also available on the [Godot Asset Library](https://godotengine.org/asset-library/asset/3377) and [Godot Asset Store](https://store-beta.godotengine.org/asset/devmoreir4/godot-3d-multiplayer-template/).
 
 ## Key Features
 
