@@ -5003,7 +5003,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_1ln88")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="3DGodotRobot"]
 libraries = {
-"": SubResource("AnimationLibrary_f1v7x")
+&"": SubResource("AnimationLibrary_f1v7x")
 }
 autoplay = "Idle"
 
