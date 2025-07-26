@@ -23,6 +23,7 @@ enum SkinColor { BLUE, YELLOW, GREEN, RED }
 @onready var _chest_mesh: MeshInstance3D = get_node("3DGodotRobot/RobotArmature/Skeleton3D/Chest")
 @onready var _face_mesh: MeshInstance3D = get_node("3DGodotRobot/RobotArmature/Skeleton3D/Face")
 @onready var _limbs_head_mesh: MeshInstance3D = get_node("3DGodotRobot/RobotArmature/Skeleton3D/Llimbs and head")
+@onready var _camera: Camera3D = get_node("SpringArmOffset/SpringArm3D/Camera3D")
 
 var _current_speed: float
 var _respawn_point = Vector3(0, 5, 0)
@@ -33,8 +34,7 @@ func _enter_tree():
 	$SpringArmOffset/SpringArm3D/Camera3D.current = is_multiplayer_authority()
 	
 func _ready():
-	if multiplayer.is_server():
-		$SpringArmOffset/SpringArm3D/Camera3D.current = false
+	return
 	
 func _physics_process(delta):
 	if not is_multiplayer_authority(): return

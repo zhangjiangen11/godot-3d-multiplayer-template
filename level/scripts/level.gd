@@ -13,6 +13,8 @@ extends Node3D
 @onready var chat: TextEdit = $MultiplayerChat/VBoxContainer/Chat
 @onready var multiplayer_chat: Control = $MultiplayerChat
 
+@export var host_as_player : bool = true
+
 var chat_visible = false
 
 func _ready():
@@ -35,19 +37,24 @@ func _on_player_connected(peer_id, player_info):
 	
 func _on_host_pressed():
 	menu.hide()
-	Network.start_host()
+	Network.start_host(nick_input.text.strip_edges(), skin_input.text.strip_edges().to_lower(), host_as_player)
 
 func _on_join_pressed():
 	menu.hide()
 	Network.join_game(nick_input.text.strip_edges(), skin_input.text.strip_edges().to_lower(), address_input.text.strip_edges())
 	
 func _add_player(id: int, player_info : Dictionary):
-	if players_container.has_node(str(id)) or not multiplayer.is_server() or id == 1:
+	if players_container.has_node(str(id)):
+		return
+	if !host_as_player and (not multiplayer.is_server() or id == 1):
 		return
 	var player = player_scene.instantiate()
 	player.name = str(id)
 	player.position = get_spawn_point()
 	players_container.add_child(player, true)
+	
+	if multiplayer.is_server() and !host_as_player:
+		player._camera.current = false
 	
 	var nick = Network.players[id]["nick"]
 	player.rpc("change_nick", nick)
@@ -76,7 +83,7 @@ func sync_player_position(id: int, new_position: Vector3):
 		
 @rpc("any_peer", "call_local")
 func sync_player_skin(id: int, skin_color: Character.SkinColor):
-	if id == 1: return # ignore host
+	if id == 1 and !host_as_player: return # ignore host
 	var player = players_container.get_node(str(id))
 	if player:
 		player.set_player_skin(skin_color)
