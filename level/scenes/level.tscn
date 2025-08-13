@@ -334,10 +334,6 @@ horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
 
-[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("uid://cffjduipbb3s5")
-spawn_path = NodePath("../PlayersContainer")
-
 [node name="PlayersContainer" type="Node3D" parent="."]
 
 [node name="GameControls" type="Control" parent="."]
