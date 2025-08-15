@@ -27,7 +27,7 @@ Follow these simple steps to get the template up and running:
 <br>
 
 To test the multiplayer functionality locally:
-Go to `Debug` > `Customize Run Instances`, then enable `Enable Multiple Instances` and set the number of instances you want to run simultaneously. In our template, the host is not treated as an additional player.
+Go to `Debug` > `Customize Run Instances`, then enable `Enable Multiple Instances` and set the number of instances you want to run simultaneously.
 
 ## Controls
 
