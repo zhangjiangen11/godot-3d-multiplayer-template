@@ -68,7 +68,6 @@ func _register_player(new_player_info):
 	var new_player_id = multiplayer.get_remote_sender_id()
 	players[new_player_id] = new_player_info
 	player_connected.emit(new_player_id, new_player_info)
-	#print("debug function _register_player on Network.gd: ", players, "\n")
 
 func _on_player_disconnected(id):
 	players.erase(id)
