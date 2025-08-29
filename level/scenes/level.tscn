@@ -1,8 +1,9 @@
-[gd_scene load_steps=17 format=3 uid="uid://dugaivbj1o66n"]
+[gd_scene load_steps=18 format=3 uid="uid://dugaivbj1o66n"]
 
 [ext_resource type="Script" uid="uid://d0dgljwwl463n" path="res://level/scripts/level.gd" id="1_e1sh7"]
 [ext_resource type="PackedScene" uid="uid://cffjduipbb3s5" path="res://level/scenes/player.tscn" id="1_uvcbi"]
 [ext_resource type="FontFile" uid="uid://diapabmalpcrj" path="res://assets/fonts/Kurland.ttf" id="3_icc4p"]
+[ext_resource type="PackedScene" uid="uid://bclq8vh1x2goy" path="res://level/scenes/ui/inventory_ui.tscn" id="4_x8g2h"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_r5xs5"]
 size = Vector2(90, 90)
@@ -335,6 +336,9 @@ vertical_alignment = 1
 uppercase = true
 
 [node name="PlayersContainer" type="Node3D" parent="."]
+
+[node name="InventoryUI" parent="." instance=ExtResource("4_x8g2h")]
+visible = false
 
 [node name="GameControls" type="Control" parent="."]
 layout_mode = 3

@@ -15,6 +15,7 @@ This template provides everything you need to kickstart your multiplayer game de
 * **Player Name Displayed:** Each player's nickname is shown above their character for easy identification.
 * **Player Skin Selection:** Players can choose from four skin options (red, green, blue, or yellow) to personalize their avatars.
 * **Global Multiplayer Chat:** An integrated chat system allows players to communicate in real-time with everyone in the game.
+* **Multiplayer Inventory System:** Server-authoritative inventory management with 20-slot grid layout, real-time drag-and-drop functionality.
 
 ## How to Run the Project
 
@@ -36,6 +37,9 @@ Go to `Debug` > `Customize Run Instances`, then enable `Enable Multiple Instance
 * <kbd>Space</kbd> to jump.
 * <kbd>Esc</kbd> to quit.
 * <kbd>Ctrl</kbd> to hide/show chat.
+* <kbd>B</kbd> to toggle inventory.
+* <kbd>F1</kbd> to add random test item (debug).
+* <kbd>F2</kbd> to print inventory contents (debug).
 
 ## Screenshots
 
