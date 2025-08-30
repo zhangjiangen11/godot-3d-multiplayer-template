@@ -21,7 +21,7 @@ func _load_items():
 func _create_sample_items():
 	# Load placeholder icon
 	var placeholder_icon = load("res://icon.png")
-	
+
 	# Basic sword
 	var iron_sword = Item.new()
 	iron_sword.id = "iron_sword"
@@ -33,7 +33,7 @@ func _create_sample_items():
 	iron_sword.value = 50
 	iron_sword.icon = placeholder_icon
 	items[iron_sword.id] = iron_sword
-	
+
 	# Health potion
 	var health_potion = Item.new()
 	health_potion.id = "health_potion"
@@ -46,7 +46,7 @@ func _create_sample_items():
 	health_potion.value = 25
 	health_potion.icon = placeholder_icon
 	items[health_potion.id] = health_potion
-	
+
 	# Leather armor
 	var leather_armor = Item.new()
 	leather_armor.id = "leather_armor"
@@ -58,7 +58,7 @@ func _create_sample_items():
 	leather_armor.value = 75
 	leather_armor.icon = placeholder_icon
 	items[leather_armor.id] = leather_armor
-	
+
 	# Magic gem
 	var magic_gem = Item.new()
 	magic_gem.id = "magic_gem"
@@ -71,7 +71,7 @@ func _create_sample_items():
 	magic_gem.value = 200
 	magic_gem.icon = placeholder_icon
 	items[magic_gem.id] = magic_gem
-	
+
 	# Pickaxe tool
 	var pickaxe = Item.new()
 	pickaxe.id = "iron_pickaxe"
@@ -88,10 +88,10 @@ func add_item_to_database(item: Item) -> bool:
 	if item.id.is_empty():
 		push_error("Cannot add item with empty ID to database")
 		return false
-	
+
 	if items.has(item.id):
 		push_warning("Item with ID '" + item.id + "' already exists in database. Overwriting.")
-	
+
 	items[item.id] = item
 	return true
 

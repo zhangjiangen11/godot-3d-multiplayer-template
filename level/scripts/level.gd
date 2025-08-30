@@ -23,11 +23,11 @@ func _ready():
 	multiplayer_chat.hide()
 	menu.show()
 	multiplayer_chat.set_process_input(true)
-	
+
 	# Connect inventory signals
 	if inventory_ui:
 		inventory_ui.inventory_closed.connect(_on_inventory_closed)
-	
+
 	if not multiplayer.is_server():
 		return
 
@@ -81,9 +81,11 @@ func toggle_chat():
 	chat_visible = !chat_visible
 	if chat_visible:
 		multiplayer_chat.show()
+		await get_tree().process_frame
 		message.grab_focus()
 	else:
 		multiplayer_chat.hide()
+		message.text = ""
 		get_viewport().set_input_as_handled()
 
 func is_chat_visible() -> bool:
@@ -94,8 +96,10 @@ func _input(event):
 		toggle_chat()
 	elif event.is_action_pressed("inventory"):
 		toggle_inventory()
-	elif event is InputEventKey and event.keycode == KEY_ENTER:
-		_on_send_pressed()
+	elif event is InputEventKey and event.keycode == KEY_ENTER and event.pressed:
+		if chat_visible and message.has_focus():
+			_on_send_pressed()
+			get_viewport().set_input_as_handled()
 	elif event is InputEventKey and event.pressed and event.keycode == KEY_F1:
 		# Debug: Add test item to local player's inventory
 		_debug_add_item()
@@ -112,22 +116,36 @@ func _on_send_pressed() -> void:
 
 	rpc("msg_rpc", nick, trimmed_message)
 	message.text = ""
+
 	message.grab_focus()
+
+func _limit_chat_history():
+	var lines = chat.text.split("\n")
+	if lines.size() > 100:
+		var start_index = lines.size() - 100
+		chat.text = "\n".join(lines.slice(start_index))
 
 @rpc("any_peer", "call_local")
 func msg_rpc(nick, msg):
-	chat.text += str(nick, " : ", msg, "\n")
+	var time = Time.get_time_string_from_system()
+	var formatted_message = "[" + time + "] " + nick + ": " + msg + "\n"
+
+	chat.text += formatted_message
+
+	chat.scroll_vertical = chat.get_line_count()
+
+	_limit_chat_history()
 
 # ---------- INVENTORY SYSTEM ----------
 func toggle_inventory():
 	if menu.visible:
 		return
-	
+
 	# Get the local player
 	var local_player = _get_local_player()
 	if not local_player:
 		return
-	
+
 	inventory_visible = !inventory_visible
 	if inventory_visible:
 		inventory_ui.open_inventory(local_player)

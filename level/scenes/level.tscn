@@ -275,19 +275,12 @@ flat = true
 
 [node name="MultiplayerChat" type="Control" parent="."]
 visible = false
-top_level = true
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 0
 offset_left = 16.0
 offset_top = 16.0
-offset_right = -764.0
-offset_bottom = -254.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
+offset_right = 400.0
+offset_bottom = 450.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MultiplayerChat"]
 layout_mode = 1
@@ -302,8 +295,10 @@ alignment = 1
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_fonts/font = ExtResource("3_icc4p")
-text = "
-"
+editable = false
+context_menu_enabled = false
+shortcut_keys_enabled = false
+text = "Welcome to the chat! Press Ctrl to toggle.\n"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MultiplayerChat/VBoxContainer"]
 layout_mode = 2
@@ -313,27 +308,14 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 theme_override_fonts/font = ExtResource("3_icc4p")
+placeholder_text = "Type your message here..."
+max_length = 100
 
 [node name="Send" type="Button" parent="MultiplayerChat/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_icc4p")
 text = "Send"
-
-[node name="ChatTitle" type="Label" parent="MultiplayerChat"]
-top_level = true
-layout_mode = 2
-anchor_right = 1.0
-offset_top = 16.0
-offset_right = -764.0
-offset_bottom = 34.0
-grow_horizontal = 2
-size_flags_horizontal = 4
-size_flags_vertical = 6
-theme_override_fonts/font = ExtResource("3_icc4p")
-text = "Welcome to Global Chat!"
-horizontal_alignment = 1
-vertical_alignment = 1
-uppercase = true
+custom_minimum_size = Vector2(80, 0)
 
 [node name="PlayersContainer" type="Node3D" parent="."]
 

@@ -16,16 +16,16 @@ signal inventory_closed
 func _ready():
 	# Load the slot UI scene
 	slot_ui_scene = preload("res://level/scenes/ui/inventory_slot_ui.tscn")
-	
+
 	# Set up grid
 	grid_container.columns = 4
-	
+
 	# Connect close button
 	close_button.pressed.connect(_on_close_pressed)
-	
+
 	# Hide tooltip initially
 	tooltip.visible = false
-	
+
 	# Will be initialized when a player opens their inventory
 	_create_slot_uis()
 
@@ -34,21 +34,21 @@ func _create_slot_uis():
 	for child in grid_container.get_children():
 		child.queue_free()
 	slot_uis.clear()
-	
+
 	# Create slot UIs
 	for i in range(PlayerInventory.INVENTORY_SIZE):
 		var slot_ui = slot_ui_scene.instantiate() as InventorySlotUI
 		slot_ui.custom_minimum_size = Vector2(64, 64)
 		slot_ui.parent_inventory = self
-		
+
 		# Connect signals
 		slot_ui.slot_clicked.connect(_on_slot_clicked)
 		slot_ui.item_hovered.connect(_on_item_hovered)
 		slot_ui.item_unhovered.connect(_on_item_unhovered)
-		
+
 		# Set slot data - will be empty initially
 		slot_ui.set_slot_data(null, i)
-		
+
 		grid_container.add_child(slot_ui)
 		slot_uis.append(slot_ui)
 
@@ -56,7 +56,7 @@ func update_inventory_display():
 	if not current_player or not current_player.get_inventory():
 		print("Debug: No current_player or inventory found")
 		return
-	
+
 	var player_inventory = current_player.get_inventory()
 	print("Debug: Updating inventory display with ", player_inventory.slots.size(), " slots")
 	for i in range(slot_uis.size()):
@@ -65,7 +65,7 @@ func update_inventory_display():
 
 func _on_slot_clicked(slot_index: int, button: int):
 	print("Slot ", slot_index, " clicked with button ", button)
-	
+
 	# Handle different click types
 	match button:
 		MOUSE_BUTTON_LEFT:
@@ -78,7 +78,7 @@ func _on_slot_clicked(slot_index: int, button: int):
 func _handle_right_click(slot_index: int):
 	if not current_player or not current_player.get_inventory():
 		return
-	
+
 	var player_inventory = current_player.get_inventory()
 	var slot = player_inventory.get_slot(slot_index)
 	if slot and not slot.is_empty():
@@ -96,26 +96,52 @@ func _on_item_unhovered():
 func _show_tooltip(item: Item):
 	if not item:
 		return
-	
-	# Create rich text for tooltip
-	var tooltip_content = "[b]" + item.name + "[/b]\n"
-	tooltip_content += item.description + "\n\n"
-	tooltip_content += "Type: " + _get_item_type_string(item.item_type) + "\n"
-	tooltip_content += "Rarity: " + _get_rarity_string(item.rarity) + "\n"
-	tooltip_content += "Value: " + str(item.value) + " gold"
-	
+
+	var tooltip_content = "[b][color=#FFD700]" + item.name + "[/color][/b]\n"
+	tooltip_content += "[color=#CCCCCC]" + item.description + "[/color]\n\n"
+	tooltip_content += "[color=#87CEEB]Type:[/color] " + _get_item_type_string(item.item_type) + "\n"
+	tooltip_content += "[color=#FF69B4]Rarity:[/color] " + _get_rarity_string(item.rarity) + "\n"
+	tooltip_content += "[color=#FFD700]Value:[/color] " + str(item.value) + " gold"
+
 	if item.stackable:
-		tooltip_content += "\nMax Stack: " + str(item.max_stack)
-	
+		tooltip_content += "\n[color=#98FB98]Max Stack:[/color] " + str(item.max_stack)
+
 	tooltip_label.text = tooltip_content
 	tooltip.visible = true
-	
-	# Position tooltip near mouse
-	var mouse_pos = get_global_mouse_position()
-	tooltip.global_position = mouse_pos + Vector2(10, 10)
+
+	_position_tooltip_smartly()
 
 func _hide_tooltip():
 	tooltip.visible = false
+
+func _position_tooltip_smartly():
+	# Get mouse position and tooltip size
+	var mouse_pos = get_global_mouse_position()
+	var tooltip_size = tooltip.size
+
+	var viewport_size = get_viewport().get_visible_rect().size
+
+	# Start with default position (mouse + offset)
+	var tooltip_pos = mouse_pos + Vector2(10, 10)
+
+	# Check right edge - if tooltip goes off screen, move it left
+	if tooltip_pos.x + tooltip_size.x > viewport_size.x:
+		tooltip_pos.x = mouse_pos.x - tooltip_size.x - 10
+
+	# Check bottom edge - if tooltip goes off screen, move it up
+	if tooltip_pos.y + tooltip_size.y > viewport_size.y:
+		tooltip_pos.y = mouse_pos.y - tooltip_size.y - 10
+
+	# Ensure tooltip doesn't go off left edge
+	if tooltip_pos.x < 0:
+		tooltip_pos.x = 10
+
+	# Ensure tooltip doesn't go off top edge
+	if tooltip_pos.y < 0:
+		tooltip_pos.y = 10
+
+	# Apply the smart position
+	tooltip.global_position = tooltip_pos
 
 func _get_item_type_string(type: Item.ItemType) -> String:
 	match type:
@@ -137,7 +163,7 @@ func _get_rarity_string(rarity: Item.ItemRarity) -> String:
 
 func handle_item_drop(from_slot: int, to_slot: int, inventory_type: String):
 	print("Moving item from slot ", from_slot, " to slot ", to_slot)
-	
+
 	if inventory_type == "player" and current_player:
 		# Send request to server for inventory operation
 		current_player.request_move_item.rpc_id(1, from_slot, to_slot)
