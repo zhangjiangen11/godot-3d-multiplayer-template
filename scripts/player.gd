@@ -43,24 +43,18 @@ func _ready():
 	if is_local_player:
 		player_inventory = PlayerInventory.new()
 		_add_starting_items()
-		print("Debug: Local player inventory initialized for player ", name)
 	elif multiplayer.is_server():
-		# Server-side: Always create inventory for all players (including clients)
 		player_inventory = PlayerInventory.new()
 		_add_starting_items()
-		print("Debug: Server-side player inventory initialized for player ", name, " (client ", get_multiplayer_authority(), ")")
 	else:
 		if get_multiplayer_authority() == local_client_id:
-			# This player belongs to our client, request inventory sync
 			request_inventory_sync.rpc_id(1)
-			print("Debug: Requested inventory sync for local player ", name)
 
 func _physics_process(delta):
 	if not is_multiplayer_authority(): return
 
 	var current_scene = get_tree().get_current_scene()
 	if current_scene and is_on_floor():
-		# Freeze movement if chat or inventory is visible
 		var should_freeze = false
 		if current_scene.has_method("is_chat_visible") and current_scene.is_chat_visible():
 			should_freeze = true
@@ -168,48 +162,37 @@ func set_mesh_texture(mesh_instance: MeshInstance3D, texture: CompressedTexture2
 func request_inventory_sync():
 	print("Debug: request_inventory_sync called on player ", name, " (authority: ", get_multiplayer_authority(), ") by client ", multiplayer.get_remote_sender_id())
 
-	# Only the server can handle this request
 	if not multiplayer.is_server():
-		print("Debug: Not on server, ignoring sync request")
 		return
 
 	var requesting_client = multiplayer.get_remote_sender_id()
-	# Validate that the requesting client is asking for their own player's inventory
 	if requesting_client != get_multiplayer_authority():
 		push_warning("Client " + str(requesting_client) + " tried to request inventory for player " + str(get_multiplayer_authority()))
 		return
 
 	if player_inventory:
-		# Send inventory data only to the requesting client
 		sync_inventory_to_owner.rpc_id(requesting_client, player_inventory.to_dict())
 
 @rpc("any_peer", "call_local", "reliable")
 func sync_inventory_to_owner(inventory_data: Dictionary):
 	print("Debug: sync_inventory_to_owner called on player ", name, " (authority: ", get_multiplayer_authority(), ") - local unique id: ", multiplayer.get_unique_id(), " from: ", multiplayer.get_remote_sender_id())
 
-	# Only allow server to send inventory updates
 	if multiplayer.get_remote_sender_id() != 1:
-		print("Debug: Ignoring inventory sync from non-server peer: ", multiplayer.get_remote_sender_id())
 		return
 
-	# Only the owning client should process this (not other clients)
 	if not is_multiplayer_authority():
-		print("Debug: Not the owning client, ignoring inventory sync")
 		return
 
 	if not player_inventory:
 		player_inventory = PlayerInventory.new()
 	player_inventory.from_dict(inventory_data)
 
-	# Update the client's inventory UI if it's open
 	var level_scene = get_tree().get_current_scene()
 	if level_scene:
-		# Check if this is the local player's inventory being updated
 		if is_multiplayer_authority() or get_multiplayer_authority() == multiplayer.get_unique_id():
 			print("Debug: This is the local player, updating UI")
 			if level_scene.has_method("update_local_inventory_display"):
 				level_scene.update_local_inventory_display()
-			# Also directly update the inventory UI if it exists and is visible
 			if level_scene.has_node("InventoryUI"):
 				var inventory_ui = level_scene.get_node("InventoryUI")
 				if inventory_ui.visible and inventory_ui.has_method("refresh_display"):
@@ -222,22 +205,17 @@ func sync_inventory_to_owner(inventory_data: Dictionary):
 func request_move_item(from_slot: int, to_slot: int, quantity: int = -1):
 	print("Debug: request_move_item called - from:", from_slot, " to:", to_slot, " on player ", name, " (authority: ", get_multiplayer_authority(), ") by client ", multiplayer.get_remote_sender_id())
 
-	# Only server handles inventory operations - check if we're on the server
 	if not multiplayer.is_server():
-		print("Debug: Not on server, ignoring move request")
 		return
 
-	# Validate that the requesting client owns this player
 	var requesting_client = multiplayer.get_remote_sender_id()
 	if requesting_client != get_multiplayer_authority():
 		push_warning("Client " + str(requesting_client) + " tried to modify inventory for player " + str(get_multiplayer_authority()))
 		return
 
 	if not player_inventory:
-		print("Debug: No player inventory found for move")
 		return
 
-	# Validate slot indices
 	if from_slot < 0 or from_slot >= PlayerInventory.INVENTORY_SIZE or to_slot < 0 or to_slot >= PlayerInventory.INVENTORY_SIZE:
 		push_warning("Invalid slot indices: from=" + str(from_slot) + " to=" + str(to_slot))
 		return
@@ -256,12 +234,10 @@ func request_move_item(from_slot: int, to_slot: int, quantity: int = -1):
 
 	if success:
 		print("Debug: Move successful, syncing inventory to owner ", get_multiplayer_authority())
-		# Send updated inventory only to this player's client
 		var owner_id = get_multiplayer_authority()
-		if owner_id != 1:  # If not the server itself
+		if owner_id != 1:
 			sync_inventory_to_owner.rpc_id(owner_id, player_inventory.to_dict())
 		else:
-			# If this is the server player, update directly
 			var level_scene = get_tree().get_current_scene()
 			if level_scene and level_scene.has_method("update_local_inventory_display"):
 				level_scene.update_local_inventory_display()
@@ -273,20 +249,16 @@ func request_add_item(item_id: String, quantity: int = 1):
 	print("Debug: request_add_item called on player ", name, " (authority: ", get_multiplayer_authority(), ") by client ", multiplayer.get_remote_sender_id())
 
 	if not multiplayer.is_server():
-		print("Debug: Not on server, ignoring request")
 		return
 
-	# Validate that the requesting client owns this player (for admin/pickup scenarios)
 	var requesting_client = multiplayer.get_remote_sender_id()
-	if requesting_client != get_multiplayer_authority() and requesting_client != 1:  # Allow server to add items
+	if requesting_client != get_multiplayer_authority() and requesting_client != 1:
 		push_warning("Client " + str(requesting_client) + " tried to add items to player " + str(get_multiplayer_authority()))
 		return
 
 	if not player_inventory:
-		print("Debug: No player inventory found")
 		return
 
-	# Validate item exists and quantity is positive
 	if quantity <= 0:
 		push_warning("Invalid quantity: " + str(quantity))
 		return
@@ -301,7 +273,6 @@ func request_add_item(item_id: String, quantity: int = 1):
 	print("Debug: Added ", added, " ", item_id, " to inventory (", remaining, " remaining)")
 
 	if added > 0:
-		# Send updated inventory only to this player's client
 		var owner_id = get_multiplayer_authority()
 		print("Debug: Syncing inventory to owner ", owner_id)
 		if owner_id != 1:
@@ -316,10 +287,8 @@ func request_remove_item(item_id: String, quantity: int = 1):
 	print("Debug: request_remove_item called on player ", name, " (authority: ", get_multiplayer_authority(), ") by client ", multiplayer.get_remote_sender_id())
 
 	if not multiplayer.is_server():
-		print("Debug: Not on server, ignoring request")
 		return
 
-	# Validate that the requesting client owns this player
 	var requesting_client = multiplayer.get_remote_sender_id()
 	if requesting_client != get_multiplayer_authority():
 		push_warning("Client " + str(requesting_client) + " tried to remove items from player " + str(get_multiplayer_authority()))
@@ -346,7 +315,6 @@ func _add_starting_items():
 	if not player_inventory:
 		return
 
-	# Add some starting items for testing
 	var sword = ItemDatabase.get_item("iron_sword")
 	var potion = ItemDatabase.get_item("health_potion")
 

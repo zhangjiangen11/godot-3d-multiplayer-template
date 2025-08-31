@@ -14,39 +14,26 @@ var slot_uis: Array[InventorySlotUI] = []
 signal inventory_closed
 
 func _ready():
-	# Load the slot UI scene
-	slot_ui_scene = preload("res://level/scenes/ui/inventory_slot_ui.tscn")
-
-	# Set up grid
+	slot_ui_scene = preload("res://scenes/ui/inventory_slot_ui.tscn")
 	grid_container.columns = 4
-
-	# Connect close button
 	close_button.pressed.connect(_on_close_pressed)
-
-	# Hide tooltip initially
 	tooltip.visible = false
-
-	# Will be initialized when a player opens their inventory
 	_create_slot_uis()
 
 func _create_slot_uis():
-	# Clear existing slots
 	for child in grid_container.get_children():
 		child.queue_free()
 	slot_uis.clear()
 
-	# Create slot UIs
 	for i in range(PlayerInventory.INVENTORY_SIZE):
 		var slot_ui = slot_ui_scene.instantiate() as InventorySlotUI
 		slot_ui.custom_minimum_size = Vector2(64, 64)
 		slot_ui.parent_inventory = self
 
-		# Connect signals
 		slot_ui.slot_clicked.connect(_on_slot_clicked)
 		slot_ui.item_hovered.connect(_on_item_hovered)
 		slot_ui.item_unhovered.connect(_on_item_unhovered)
 
-		# Set slot data - will be empty initially
 		slot_ui.set_slot_data(null, i)
 
 		grid_container.add_child(slot_ui)
@@ -54,7 +41,6 @@ func _create_slot_uis():
 
 func update_inventory_display():
 	if not current_player or not current_player.get_inventory():
-		print("Debug: No current_player or inventory found")
 		return
 
 	var player_inventory = current_player.get_inventory()
@@ -66,13 +52,10 @@ func update_inventory_display():
 func _on_slot_clicked(slot_index: int, button: int):
 	print("Slot ", slot_index, " clicked with button ", button)
 
-	# Handle different click types
 	match button:
 		MOUSE_BUTTON_LEFT:
-			# Left click - select/use item
 			pass
 		MOUSE_BUTTON_RIGHT:
-			# Right click - context menu or quick action
 			_handle_right_click(slot_index)
 
 func _handle_right_click(slot_index: int):
@@ -115,32 +98,24 @@ func _hide_tooltip():
 	tooltip.visible = false
 
 func _position_tooltip_smartly():
-	# Get mouse position and tooltip size
 	var mouse_pos = get_global_mouse_position()
 	var tooltip_size = tooltip.size
 
 	var viewport_size = get_viewport().get_visible_rect().size
-
-	# Start with default position (mouse + offset)
 	var tooltip_pos = mouse_pos + Vector2(10, 10)
 
-	# Check right edge - if tooltip goes off screen, move it left
 	if tooltip_pos.x + tooltip_size.x > viewport_size.x:
 		tooltip_pos.x = mouse_pos.x - tooltip_size.x - 10
 
-	# Check bottom edge - if tooltip goes off screen, move it up
 	if tooltip_pos.y + tooltip_size.y > viewport_size.y:
 		tooltip_pos.y = mouse_pos.y - tooltip_size.y - 10
 
-	# Ensure tooltip doesn't go off left edge
 	if tooltip_pos.x < 0:
 		tooltip_pos.x = 10
 
-	# Ensure tooltip doesn't go off top edge
 	if tooltip_pos.y < 0:
 		tooltip_pos.y = 10
 
-	# Apply the smart position
 	tooltip.global_position = tooltip_pos
 
 func _get_item_type_string(type: Item.ItemType) -> String:
@@ -165,9 +140,7 @@ func handle_item_drop(from_slot: int, to_slot: int, inventory_type: String):
 	print("Moving item from slot ", from_slot, " to slot ", to_slot)
 
 	if inventory_type == "player" and current_player:
-		# Send request to server for inventory operation
 		current_player.request_move_item.rpc_id(1, from_slot, to_slot)
-		# UI will be updated when server responds with sync_inventory_to_owner
 
 func _on_close_pressed():
 	inventory_closed.emit()
@@ -182,7 +155,6 @@ func open_inventory(player: Character = null):
 func close_inventory():
 	visible = false
 
-# Called by level scene to update inventory display when server syncs
 func refresh_display():
 	print("Debug: InventoryUI refresh_display called")
 	update_inventory_display()

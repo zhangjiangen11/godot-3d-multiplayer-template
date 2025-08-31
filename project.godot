@@ -13,13 +13,13 @@ config_version=5
 config/name="TemplateOnlineMultiplayer"
 config/description="This is a foundational template for a 3D multiplayer game, developed in Godot Engine."
 config/tags=PackedStringArray("3d", "network")
-run/main_scene="res://level/scenes/level.tscn"
+run/main_scene="res://scenes/level/level.tscn"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.png"
 
 [autoload]
 
-Network="*res://level/scripts/network.gd"
+Network="*res://scripts/network.gd"
 ItemDatabase="*res://scripts/item_database.gd"
 
 [display]

@@ -27,7 +27,6 @@ func _ready():
 	mouse_entered.connect(_on_mouse_entered)
 	mouse_exited.connect(_on_mouse_exited)
 
-	# Initialize empty slot
 	update_display()
 
 func set_slot_data(slot_data: InventorySlot, index: int):
@@ -57,17 +56,14 @@ func _show_item_slot():
 		_show_empty_slot()
 		return
 
-	# Set item icon
 	item_icon.texture = item.icon
 
-	# Show quantity if stackable and > 1
 	if item.stackable and inventory_data.quantity > 1:
 		quantity_label.text = str(inventory_data.quantity)
 		quantity_label.visible = true
 	else:
 		quantity_label.visible = false
 
-	# Show rarity border
 	if RARITY_COLORS.has(item.rarity):
 		rarity_border.modulate = RARITY_COLORS[item.rarity]
 		rarity_border.visible = true
@@ -85,16 +81,13 @@ func _on_mouse_entered():
 		if item:
 			item_hovered.emit(slot_index, item)
 
-	# Highlight slot
 	background.modulate = Color(1.2, 1.2, 1.2)
 
 func _on_mouse_exited():
 	item_unhovered.emit()
 
-	# Remove highlight
 	background.modulate = Color.WHITE
 
-# Drag and drop functionality
 func _can_drop_data(_position: Vector2, data) -> bool:
 	return data is Dictionary and data.has("slot_index") and data.has("inventory_type")
 
@@ -110,7 +103,6 @@ func _get_drag_data(_position: Vector2):
 	if not item:
 		return null
 
-	# Create drag preview
 	var preview = Control.new()
 	var preview_icon = TextureRect.new()
 	preview_icon.texture = item.icon
@@ -118,11 +110,9 @@ func _get_drag_data(_position: Vector2):
 	preview_icon.size = Vector2(32, 32)
 	preview.add_child(preview_icon)
 
-	# Semi-transparent during drag
 	preview.modulate = Color(1, 1, 1, 0.8)
 	set_drag_preview(preview)
 
-	# Dim the original slot during drag
 	item_icon.modulate = Color(0.5, 0.5, 0.5)
 
 	return {
@@ -134,5 +124,4 @@ func _get_drag_data(_position: Vector2):
 
 func _notification(what):
 	if what == NOTIFICATION_DRAG_END:
-		# Restore original appearance when drag ends
 		item_icon.modulate = Color.WHITE

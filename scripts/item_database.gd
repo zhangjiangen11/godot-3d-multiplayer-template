@@ -15,11 +15,9 @@ func get_all_items() -> Dictionary:
 	return items
 
 func _load_items():
-	# Create sample items for testing
 	_create_sample_items()
 
 func _create_sample_items():
-	# Load placeholder icon
 	var placeholder_icon = load("res://icon.png")
 
 	# Basic sword
