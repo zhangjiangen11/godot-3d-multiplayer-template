@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://d7e6f5g4h3i2j1k0"]
+[gd_scene load_steps=2 format=3 uid="uid://ccencq0lcd3ph"]
 
-[ext_resource type="Script" uid="uid://bi8re6tdr1ojt" path="res://scripts/multiplayer_chat.gd" id="1_h7x4v"]
+[ext_resource type="Script" uid="uid://bi8re6tdr1ojt" path="res://scripts/multiplayer_chat_ui.gd" id="1_h7x4v"]
 
 [node name="MultiplayerChatUI" type="Control"]
 layout_mode = 3

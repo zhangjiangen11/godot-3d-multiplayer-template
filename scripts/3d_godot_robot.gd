@@ -16,7 +16,9 @@ func animate(_velocity: Vector3) -> void:
 		if _velocity.y < 0:
 			animation_player.play("Fall")
 		else:
-			animation_player.play("Jump")
+			var current_anim = animation_player.current_animation
+			if current_anim != "Jump" and current_anim != "Jump2":
+				animation_player.play("Jump")
 		return
 
 	if _velocity:
@@ -28,3 +30,7 @@ func animate(_velocity: Vector3) -> void:
 		return
 
 	animation_player.play("Idle")
+
+func play_jump_animation(jump_type: String = "Jump") -> void:
+	if animation_player:
+		animation_player.play(jump_type)

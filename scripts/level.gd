@@ -85,12 +85,12 @@ func is_chat_visible() -> bool:
 func _input(event):
 	if event.is_action_pressed("toggle_chat"):
 		toggle_chat()
-	elif event.is_action_pressed("inventory"):
-		toggle_inventory()
-	elif event is InputEventKey and event.keycode == KEY_ENTER and event.pressed:
-		if chat_visible and multiplayer_chat.message.has_focus():
+	elif chat_visible and multiplayer_chat.message.has_focus():
+		if event is InputEventKey and event.keycode == KEY_ENTER and event.pressed:
 			multiplayer_chat._on_send_pressed()
 			get_viewport().set_input_as_handled()
+	elif event.is_action_pressed("inventory"):
+		toggle_inventory()
 	elif event is InputEventKey and event.pressed and event.keycode == KEY_F1:
 		_debug_add_item()
 	elif event is InputEventKey and event.pressed and event.keycode == KEY_F2:

@@ -30,6 +30,9 @@ var _current_speed: float
 var _respawn_point = Vector3(0, 5, 0)
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
+var can_double_jump = true
+var has_double_jumped = false
+
 func _enter_tree():
 	set_multiplayer_authority(str(name).to_int())
 	$SpringArmOffset/SpringArm3D/Camera3D.current = is_multiplayer_authority()
@@ -65,15 +68,24 @@ func _physics_process(delta):
 			freeze()
 			return
 
-	if not is_on_floor():
-		velocity.y -= gravity * delta
-		_body.animate(velocity)
-
 	if is_on_floor():
+		can_double_jump = true
+		has_double_jumped = false
+
 		if Input.is_action_just_pressed("jump"):
 			velocity.y = JUMP_VELOCITY
+			can_double_jump = true
+			_body.play_jump_animation("Jump")
 	else:
 		velocity.y -= gravity * delta
+
+		if can_double_jump and not has_double_jumped and Input.is_action_just_pressed("jump"):
+			velocity.y = JUMP_VELOCITY
+			has_double_jumped = true
+			can_double_jump = false
+			_body.play_jump_animation("Jump2")
+
+	velocity.y -= gravity * delta
 
 	_move()
 	move_and_slide()
