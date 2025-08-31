@@ -9,7 +9,7 @@ The inventory system is a **server-authoritative** multiplayer implementation th
 ### Core Components
 
 - **PlayerInventory** (`scripts/player_inventory.gd`) - Core inventory logic with slot management
-- **InventorySlot** (`scripts/inventory_slot.gd`) - Individual slot data and validation  
+- **InventorySlot** (`scripts/inventory_slot.gd`) - Individual slot data and validation
 - **Item & ItemDatabase** (`scripts/item.gd`, `scripts/item_database.gd`) - Item definitions and management
 - **InventoryUI** (`scripts/inventory_ui.gd`) - Client-side UI and interaction handling
 - **Player Network Layer** (`level/scripts/player.gd`) - RPC methods and server validation
@@ -39,7 +39,7 @@ Client: Updates local inventory and UI
 Client: User drags item from slot A to slot B
 Client -> Server: request_move_item(from_slot, to_slot, quantity)
 Server: Validates request and ownership
-Server: Processes move/swap operation  
+Server: Processes move/swap operation
 Server -> Client: sync_inventory_to_owner(updated_inventory)
 Client: UI updates immediately with new state
 ```
@@ -83,32 +83,11 @@ Client: UI updates to show removed items
 |--------|------------|-------------|-----------|
 | `sync_inventory_to_owner()` | `inventory_data` | Send updated inventory state | Only to owning client |
 
-## Data Flow
-
-```mermaid
-sequenceDiagram
-    participant C as Client
-    participant S as Server
-    participant UI as InventoryUI
-    
-    Note over C,S: Item Movement Example
-    C->>UI: User drags item (slot 1 → slot 5)
-    UI->>C: handle_item_drop(1, 5, "player")
-    C->>S: request_move_item.rpc_id(1, 1, 5)
-    S->>S: Validate client owns player
-    S->>S: Validate slot indices (0-19)
-    S->>S: Process move_item() or swap_items()
-    S->>C: sync_inventory_to_owner.rpc_id(client_id, data)
-    C->>C: Update local PlayerInventory
-    C->>UI: refresh_display()
-    UI->>UI: Update slot visuals immediately
-```
-
 ## Security Features
 
 ### Server-Side Validation
 - **Ownership Verification**: Clients can only modify their own inventories
-- **Slot Bounds Checking**: Prevents out-of-bounds slot access  
+- **Slot Bounds Checking**: Prevents out-of-bounds slot access
 - **Item Existence**: Validates items exist in ItemDatabase
 - **Quantity Validation**: Ensures positive quantities and sufficient availability
 
@@ -163,7 +142,7 @@ func use_item(item_id: String):
 - Check that `update_local_inventory_display()` is connected
 - Verify client is receiving RPC (check debug logs)
 
-**Items Not Moving** 
+**Items Not Moving**
 - Check server receives `request_move_item` RPC
 - Verify slot indices are within bounds (0-19)
 - Confirm client owns the player node
@@ -189,8 +168,7 @@ Enable debug prints by monitoring console output:
 - **UI Updates**: Real-time updates prevent perceived lag
 
 ## Future Extensions
-
-- **Trade System**: Extend RPCs for player-to-player item transfers  
+- **Trade System**: Extend RPCs for player-to-player item transfers
 - **Persistence**: Add database integration for inventory saving
 - **Item Categories**: Implement equipment slots vs consumable slots
 - **Batch Operations**: Support multiple item operations in single RPC

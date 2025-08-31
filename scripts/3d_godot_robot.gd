@@ -11,14 +11,14 @@ func apply_rotation(_velocity: Vector3) -> void:
 	var new_rotation_y = lerp_angle(rotation.y, atan2(-_velocity.x, -_velocity.z), LERP_VELOCITY)
 	rotation.y = new_rotation_y
 
-	# rpc("sync_player_rotation", new_rotation_y)
-
 func animate(_velocity: Vector3) -> void:
 	if not _character.is_on_floor():
 		if _velocity.y < 0:
 			animation_player.play("Fall")
 		else:
-			animation_player.play("Jump")
+			var current_anim = animation_player.current_animation
+			if current_anim != "Jump" and current_anim != "Jump2":
+				animation_player.play("Jump")
 		return
 
 	if _velocity:
@@ -31,6 +31,6 @@ func animate(_velocity: Vector3) -> void:
 
 	animation_player.play("Idle")
 
-# @rpc("any_peer", "reliable")
-# func sync_player_rotation(rotation_y: float) -> void:
-# 	rotation.y = rotation_y
+func play_jump_animation(jump_type: String = "Jump") -> void:
+	if animation_player:
+		animation_player.play(jump_type)

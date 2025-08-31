@@ -1,12 +1,12 @@
 [gd_scene load_steps=46 format=4 uid="uid://cffjduipbb3s5"]
 
-[ext_resource type="Script" uid="uid://c2si8gkbnde0c" path="res://level/scripts/player.gd" id="1_tdh26"]
+[ext_resource type="Script" uid="uid://c2si8gkbnde0c" path="res://scripts/player.gd" id="1_tdh26"]
 [ext_resource type="Texture2D" uid="uid://bdg48m6l86q8i" path="res://assets/characters/player/3DGodotRobot_GodotPalette.png" id="1_w11jc"]
-[ext_resource type="Script" uid="uid://v8j54rbc0ik" path="res://level/scripts/3d_godot_robot.gd" id="2_mexc5"]
+[ext_resource type="Script" uid="uid://v8j54rbc0ik" path="res://scripts/3d_godot_robot.gd" id="2_mexc5"]
 [ext_resource type="Texture2D" uid="uid://cw6pxwst2gh85" path="res://assets/characters/player/GodotRobotPaletteSwap/GodotYellowPalette.png" id="3_l3dv8"]
 [ext_resource type="Texture2D" uid="uid://bbid6mowxhd5b" path="res://assets/characters/player/GodotRobotPaletteSwap/GodotGreenPalette.png" id="4_74ree"]
 [ext_resource type="Texture2D" uid="uid://fpmmv2oxjcdv" path="res://assets/characters/player/GodotRobotPaletteSwap/GodotPalette.png" id="4_max2b"]
-[ext_resource type="Script" uid="uid://bj7yrijm7bppq" path="res://level/scripts/spring_arm_offset.gd" id="4_ygggd"]
+[ext_resource type="Script" uid="uid://bj7yrijm7bppq" path="res://scripts/spring_arm_offset.gd" id="4_ygggd"]
 [ext_resource type="Texture2D" uid="uid://brp1gy30s4rks" path="res://assets/characters/player/GodotRobotPaletteSwap/GodotRedPalette.png" id="5_qlefn"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_mx45w"]

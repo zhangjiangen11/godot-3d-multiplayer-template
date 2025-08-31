@@ -32,7 +32,7 @@ func start_host(nickname: String, skin_color_str: String):
 	multiplayer.multiplayer_peer = peer
 
 	if !nickname or nickname.strip_edges() == "":
-		nickname = "Host_" + str(1)
+		nickname = "Host_" + str(multiplayer.get_unique_id())
 
 	player_info["nick"] = nickname
 	player_info["skin"] = skin_str_to_e(skin_color_str)
